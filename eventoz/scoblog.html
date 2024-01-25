@@ -10,7 +10,8 @@
     <meta property="og:description" content="">
     <meta property="og:image" content="">
     <meta property="og:url" content="">
-    <meta property="og:type" content="">    <meta charset="UTF-8">
+    <meta property="og:type" content="">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
@@ -179,12 +180,12 @@
                                     <h5>Recent Post</h5>
                                 </div>
                                 <ul class="lab-ul widget-wrapper">
-                                  
+
 
                                 </ul>
                             </div>
 
-                            
+
 
                             <div class="widget widget-instagram">
                                 <div class="widget-header">
@@ -319,110 +320,158 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.4/purify.min.js"></script>
 
+
     <script>
-
-
-        // Extract the blogId from the URL
         document.addEventListener('DOMContentLoaded', function () {
-            // Extract the blogId from the URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const blogId = urlParams.get('id');
+            // Extract the blogId from the URL parameters
+            const blogId = localStorage.getItem('currentBlogId');
 
-            // Make the API call with the obtained blogId
-            fetch(`http://event-api.test/api/blogsco/${blogId}`)
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Clicked Blog sco find Details:', data);
 
-                    const pageHeaderContainer = document.querySelector('.image');
-                    const blogItem = document.createElement('div');
-                    blogItem.style.marginBottom = '5px';
 
-                    const imageElement = document.createElement('img');
-                    imageElement.src = data.blog.image;
-                    imageElement.alt = 'blog';
-                    imageElement.style.objectFit = 'cover';
-                    imageElement.style.width = '700px';
-                    imageElement.style.marginBottom = '10px';
-                    imageElement.style.backgroundColor = 'red';
-                    imageElement.style.border = '3px solid #34ebe5';
-                    imageElement.style.borderRadius = '10px';
+            // Check if the data has been fetched already
 
-                    blogItem.appendChild(imageElement);
-                    pageHeaderContainer.appendChild(blogItem);
+            if (blogId) {
+                // Make the API call with the obtained blogId
+                fetch(`http://event-api.test/api/blogsco/${blogId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Clicked Blog sco find Details:', data);
 
-                    const add = document.querySelector('.add');
-                    const titleElement = document.createElement('h1');
-                    titleElement.textContent = data.blog.title;
-                    titleElement.style.marginTop = '10px';
-                    titleElement.style.color = '#F46';
+                        //                     const slug = data.blog.slug ? data.blog.slug : 'sco.html';
+                        // const currentUrl = window.location.href;
+                        // const lastSlashIndex = currentUrl.lastIndexOf('/');
+                        // const urlBeforeLastSlash = currentUrl.slice(0, lastSlashIndex + 1);
+                        // const newUrl = urlBeforeLastSlash.concat(slug);
 
-                    add.appendChild(titleElement);
+                        // console.log('Current URL:', currentUrl);
+                        // console.log('New URL with slug:', newUrl);
 
-                    const add1 = document.querySelector('.description');
-                    const titleElement1 = document.createElement('h5');
-                    titleElement1.textContent = data.blog.description;
-                    titleElement1.style.marginTop = '10px';
-                    titleElement1.style.color = '#F46';
-                    add1.appendChild(titleElement1);
+                        // // Set the new URL to simulate URL change
+                        // window.history.replaceState({}, '', newUrl);
+                        // if(window.history.replaceState({}, '', newUrl)==currentUrl){
+                        //     window.location.href = 'sco.html';
 
-                    const blogListContainer = document.getElementById('blogs-list');
-const content = data.blog.content;
+                        // }
+                        // Handling page reload
 
-// Set innerHTML directly
-blogListContainer.innerHTML = content;
 
-// Handle image styling
-const imagesInContainer = blogListContainer.querySelectorAll('img');
-imagesInContainer.forEach(img => {
-    img.style.objectFit = 'cover';
-    img.style.width = '600px'; // Set your desired width
-    img.style.height = '300px'; // Set your desired height
-    img.style.borderRadius = '1%'; // Set your desired border radius
-    img.style.backgroundColor = 'lightgray'; // Set your desired background color
-});
-const oembedContainers = blogListContainer.querySelectorAll('oembed');
+                        localStorage.removeItem('currentBlogId');
 
-console.log("uid", oembedContainers[0].outerHTML)
-oembedContainers.forEach(oembed => {
-    const outerHtml = oembed.outerHTML;
-    const urlMatch = outerHtml.match(/url="(.*?)"/);
+                        const pageHeaderContainer = document.querySelector('.image');
+                        const blogItem = document.createElement('div');
+                        blogItem.style.marginBottom = '5px';
 
-    if (urlMatch) {
-        const url = urlMatch[1];
-        console.log("url", url);
+                        const imageElement = document.createElement('img');
+                        imageElement.src = data.blog.image;
+                        imageElement.alt = 'blog';
+                        imageElement.style.objectFit = 'cover';
+                        imageElement.style.width = '700px';
+                        imageElement.style.marginBottom = '10px';
+                        imageElement.style.backgroundColor = 'red';
+                        imageElement.style.border = '3px solid #34ebe5';
+                        imageElement.style.borderRadius = '10px';
 
-        const iframe = document.createElement('iframe');
-        iframe.setAttribute('src', url);
-        iframe.setAttribute('width', '600'); // Set your desired width
-        iframe.setAttribute('height', '400'); // Set your desired height
-        iframe.setAttribute('frameborder', '0');
-        iframe.setAttribute('allowfullscreen', 'true');
+                        blogItem.appendChild(imageElement);
+                        pageHeaderContainer.appendChild(blogItem);
 
-        oembed.replaceWith(iframe);
-    }
-});
+                        const add = document.querySelector('.add');
+                        const titleElement = document.createElement('h1');
+                        titleElement.textContent = data.blog.title;
+                        titleElement.style.marginTop = '10px';
+                        titleElement.style.color = '#F46';
 
-                   
+                        add.appendChild(titleElement);
 
-                    const anchorInContainer = blogListContainer.querySelectorAll('a');
+                        const add1 = document.querySelector('.description');
+                        const titleElement1 = document.createElement('h5');
+                        titleElement1.textContent = data.blog.description;
+                        titleElement1.style.marginTop = '10px';
+                        titleElement1.style.color = '#F46';
+                        add1.appendChild(titleElement1);
 
-                    anchorInContainer.forEach(link => {
-                        link.addEventListener('click', function (event) {
-                            event.preventDefault(); // Prevents the default behavior (opening the link)
-                            window.open(link.href, '_blank');
+                        const blogListContainer = document.getElementById('blogs-list');
+                        const content = data.blog.content;
+
+                        // Set innerHTML directly
+                        blogListContainer.innerHTML = content;
+
+                        // Handle image styling
+                        const imagesInContainer = blogListContainer.querySelectorAll('img');
+                        imagesInContainer.forEach(img => {
+                            img.style.objectFit = 'cover';
+                            img.style.width = '600px'; // Set your desired width
+                            img.style.height = '300px'; // Set your desired height
+                            img.style.borderRadius = '1%'; // Set your desired border radius
+                            img.style.backgroundColor = 'lightgray'; // Set your desired background color
                         });
-                    });
-                })
+                        console.log('OG Description:', data.blog.ogtype);
+                        const metaDescriptionTag = document.querySelector('meta[name="description"]');
+                        if (metaDescriptionTag) {
+                            metaDescriptionTag.content = data.blog.metadescription;
+                        }
+                        const metaDescriptionTag1 = document.querySelector('meta[property="og:title"]');
+                        if (metaDescriptionTag1) {
+                            metaDescriptionTag1.content = data.blog.ogtitle;
+                        }
+                        const image = document.querySelector('meta[property="og:image"]');
+                        if (image) {
+                            image.content = data.blog.ogimage;
+                        }
+                        document.title = data.blog.metatitle;
 
-                .catch(error => console.error('Error fetching blog details:', error));
+
+                        const des = document.querySelector('meta[property="og:description"]');
+                        if (des) {
+                            des.content = data.blog.ogdescription;
+                        }
 
 
+                        const url = document.querySelector('meta[property="og:url"]');
+                        if (url) {
+                            url.content = data.blog.ogurl;
+                        }
+                        const type = document.querySelector('meta[property="og:type"]');
+                        if (type) {
+                            type.content = data.blog.ogtype;
+                        }
+                        const oembedContainers = blogListContainer.querySelectorAll('oembed');
+                        console.log("uid", oembedContainers[0].outerHTML)
+                        oembedContainers.forEach(oembed => {
+                            const outerHtml = oembed.outerHTML;
+                            const urlMatch = outerHtml.match(/url="(.*?)"/);
+
+                            if (urlMatch) {
+                                const url = urlMatch[1];
+                                console.log("url", url);
+
+                                const iframe = document.createElement('iframe');
+                                iframe.setAttribute('src', url);
+                                iframe.setAttribute('width', '600'); // Set your desired width
+                                iframe.setAttribute('height', '400'); // Set your desired height
+                                iframe.setAttribute('frameborder', '0');
+                                iframe.setAttribute('allowfullscreen', 'true');
+
+                                oembed.replaceWith(iframe);
+                            }
+                        });
+
+
+                        const anchorInContainer = blogListContainer.querySelectorAll('a');
+                        anchorInContainer.forEach(link => {
+                            link.addEventListener('click', function (event) {
+                                event.preventDefault(); // Prevents the default behavior (opening the link)
+                                window.open(link.href, '_blank');
+                            });
+                        });
+                    })
+                    .catch(error => console.error('Error fetching blog details:', error));
+            } else {
+                console.log('BlogId not available or data already fetched. Nothing to display.');
+            }
         });
-
-
-
     </script>
+
+
     <script src="assets/js/jquery.js"></script>
     <script src="assets/js/fontawesome.min.js"></script>
     <script src="assets/js/waypoints.min.js"></script>
@@ -453,7 +502,7 @@ oembedContainers.forEach(oembed => {
 </div>
 
                             <div class="post-content ps-3">
-                                <h6><a href="#" class="blog-link" data-blog-id="${blog.id}" style="margin-left: 10px;">${blog.title}</a></h6>
+                                <h6><a href="#" class="blog-link" data-blog-id="${blog.slug}" style="margin-left: 10px;">${blog.title}</a></h6>
 
                                 
                                 <p style="text-align: justify; margin-left: 10px;">${blog.description !== null ? blog.description : ""
@@ -464,17 +513,18 @@ oembedContainers.forEach(oembed => {
                             // Append the dynamically created list item to the container
                             container.appendChild(listItem);
                         });
+
                         document.querySelectorAll('.blog-link').forEach(link => {
                             link.addEventListener('click', function (event) {
                                 event.preventDefault();
                                 const blogId = this.getAttribute('data-blog-id');
-                                const queryParams = new URLSearchParams();
-                                queryParams.set('id', blogId);
-                                window.location.href = `scoblog.html?${queryParams.toString()}`;
-
-
+                                localStorage.setItem('currentBlogId', blogId);
+                                const blog = this.getAttribute('data-blog-id');
+                                const formattedBlogId = blog.replace(/\s+/g, '-');
+                                window.location.href = `scoblog.html?${formattedBlogId}`;
                             });
                         });
+
 
                     }
                     else {
@@ -487,75 +537,46 @@ oembedContainers.forEach(oembed => {
             .catch(error => console.error('Error fetching data:', error));
     </script>
     <script>
-      // Try to get the data from local storage
-const storedData = localStorage.getItem('logoData');
+        // Try to get the data from local storage
+        const storedData = localStorage.getItem('logoData');
 
-// Check if there's stored data
-if (storedData) {
-    // If there's stored data, parse and use it
-    const data = JSON.parse(storedData);
-    updateLogo(data.logo.image);
-}
+        // Check if there's stored data
+        if (storedData) {
+            // If there's stored data, parse and use it
+            const data = JSON.parse(storedData);
+            updateLogo(data.logo.image);
+        }
 
-// Fetch data from the API
-fetch('http://event-api.test/api/api/logo')
-    .then(response => response.json())
-    .then(data => {
-        console.log('Fetched data logo:', data);
+        // Fetch data from the API
+        fetch('http://event-api.test/api/api/logo')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Fetched data logo:', data);
 
-        // Save the data in local storage
-        localStorage.setItem('logoData', JSON.stringify(data));
+                // Save the data in local storage
+                localStorage.setItem('logoData', JSON.stringify(data));
 
-        // Update the logo with the fetched data
-        updateLogo(data.logo.image);
-    })
-    .catch(error => console.error('Error fetching data:', error));
+                // Update the logo with the fetched data
+                updateLogo(data.logo.image);
+            })
+            .catch(error => console.error('Error fetching data:', error));
 
-// Function to update the logo
-function updateLogo(imageUrl) {
-    // Assuming data.image contains the logo image URL
-    const logoImages = document.querySelectorAll('.logo img');
-    
-    logoImages.forEach(logoImage => {
-        // Set the image source for each logo element
-        logoImage.src = imageUrl;
-    });
-}
+        // Function to update the logo
+        function updateLogo(imageUrl) {
+            // Assuming data.image contains the logo image URL
+            const logoImages = document.querySelectorAll('.logo img');
+
+            logoImages.forEach(logoImage => {
+                // Set the image source for each logo element
+                logoImage.src = imageUrl;
+            });
+        }
 
 
     </script>
-     <script>
-        fetch('http://event-api.test/api/findoneblog')
-            .then(response => response.json())
-            .then(data => {
-                console.log('Fetched data home:', data);
-                document.title = data.soloblog.metatitle;
-                const metaDescriptionTag = document.querySelector('meta[name="description"]');
-                if (metaDescriptionTag) {
-                    metaDescriptionTag.content = data.soloblog.metadescription;
-                }
-                const metaDescriptionTag1 = document.querySelector('meta[property="og:title"]');
-                if (metaDescriptionTag1) {
-                    metaDescriptionTag1.content = data.soloblog.ogtitle;
-                }
-                const des = document.querySelector('meta[property="og:description"]');
-                if (des) {
-                    des.content = data.soloblog.ogdescription;
-                }
-                const image = document.querySelector('meta[property="og:image"]');
-                if (image) {
-                    image.content = data.soloblog.ogimage;
-                }
-                const url = document.querySelector('meta[property="og:url"]');
-                if (url) {
-                    url.content = data.soloblog.ogurl;
-                }
-                const type = document.querySelector('meta[property="og:type"]');
-                if (type) {
-                    type.content = data.soloblog.ogtype;
-                }
-            })
-            .catch(error => console.error('Error fetching data:', error));
+
+
+    <script>
         fetch('http://event-api.test/api/link')
             .then(response => response.json())
             .then(data => {
@@ -566,8 +587,10 @@ function updateLogo(imageUrl) {
                 }
             })
             .catch(error => console.error('Error fetching data:', error));
-    
+       
+
     </script>
+
 </body>
 
 </html>
